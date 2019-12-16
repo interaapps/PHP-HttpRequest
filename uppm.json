@@ -1,0 +1,12 @@
+{
+    "name": "httprequest",
+    "version": "1.0",
+    "description": "",
+    "author": "interaapps",
+    "keywords": [
+        "httprequestclient",
+        "php"
+    ],
+    "modules": {},
+    "namespaces": {}
+}
