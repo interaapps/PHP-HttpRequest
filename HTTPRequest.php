@@ -37,17 +37,17 @@ class HTTPRequest {
     }
     
     public function headers($headers){
-        $this->headers = $headers;
+        $this->header = $headers;
         return $this;
     }
     
-    public function header($param, $val){
-        $this->header[$param] = $val;
+    public function header($header){
+        array_push($this->header, $header);
         return $this;
     }
 
     public function send() : HTTPResponse {
-        $headers = [];  
+        $headers = [];
 
         curl_setopt($this->ch, CURLOPT_HEADER, 1);
 
@@ -72,9 +72,9 @@ class HTTPRequest {
         
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($this->ch, CURLOPT_URL, $this->requestURL);
-        
+
         curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->header);
-        
+
         curl_setopt($this->ch, CURLOPT_HEADERFUNCTION, function($curl, $header) use (&$headers) {
             $len = strlen($header);
             $header = explode(':', $header, 2);
