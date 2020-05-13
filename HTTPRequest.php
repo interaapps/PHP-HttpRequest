@@ -8,6 +8,7 @@ class HTTPRequest {
     private $requestMethod = "GET",
             $requestURL,
             $params = [],
+            $header = [],
             $ch;
 
     public function __construct($url, $requestMethod){
@@ -32,6 +33,16 @@ class HTTPRequest {
 
     public function parameter($param, $val){
         $this->params[$param] = $val;
+        return $this;
+    }
+    
+    public function headers($headers){
+        $this->headers = $headers;
+        return $this;
+    }
+    
+    public function header($param, $val){
+        $this->header[$param] = $val;
         return $this;
     }
 
@@ -61,6 +72,9 @@ class HTTPRequest {
         
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($this->ch, CURLOPT_URL, $this->requestURL);
+        
+        curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->header);
+        
         curl_setopt($this->ch, CURLOPT_HEADERFUNCTION, function($curl, $header) use (&$headers) {
             $len = strlen($header);
             $header = explode(':', $header, 2);
@@ -69,7 +83,7 @@ class HTTPRequest {
             $headers[strtolower(trim($header[0]))][] = trim($header[1])[0];
             return $len;
         });
-
+        
 
         $response = curl_exec($this->ch);
 
